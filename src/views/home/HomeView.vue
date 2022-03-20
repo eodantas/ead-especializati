@@ -1,5 +1,12 @@
 <script setup>
 import CardCourse from '@/views/home/components/CardCourse.vue'
+import { computed, onMounted } from 'vue'
+import { useCoursesStore } from '@/stores/courses'
+const store = useCoursesStore()
+onMounted(() => {
+  store.getCourses()
+})
+const myCourses = computed(() => store.myCourses)
 </script>
 
 <template>
@@ -14,7 +21,12 @@ import CardCourse from '@/views/home/components/CardCourse.vue'
 
   <div class="content">
     <ul class="listCourses">
-      <CardCourse :title="'Curso de Vue'" :image="''" :bg-name="'laravel'" />
+      <CardCourse
+        v-for="course in myCourses"
+        :key="course.id"
+        :bg-name="'laravel'"
+        :course="course"
+      />
     </ul>
   </div>
 </template>

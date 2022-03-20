@@ -2,11 +2,16 @@
 import Modules from '@/views/modules/components/Modules.vue'
 import Player from '@/views/modules/components/Player.vue'
 import Supports from '@/views/modules/components/Supports.vue'
+import { useCoursesStore } from '@/stores/courses'
+import { computed } from 'vue'
+const store = useCoursesStore()
+const course = computed(() => store.courseSelected)
 </script>
+
 <template>
   <div>
     <div class="pageTitle">
-      <span class="title">Curso X</span>
+      <span class="title">{{ course.name }}</span>
       <span class="dots">
         <span></span>
         <span></span>

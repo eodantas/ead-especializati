@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { TOKEN_NAME } from '@/configs'
-import http from '@/services/Http.init'
-
+import Http from '@/services/Http.init'
+const http = new Http({ auth: false })
 export const useUsersStore = defineStore({
   id: 'users',
   state: () => ({

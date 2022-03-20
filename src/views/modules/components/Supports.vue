@@ -1,5 +1,5 @@
 <script setup>
-import Supports from '@/components/Supports.vue'
+import Support from '@/components/Support.vue'
 </script>
 <template>
   <div class="comments">
@@ -10,6 +10,6 @@ import Supports from '@/components/Supports.vue'
         Enviar nova dúvida
       </button>
     </div>
-    <Supports />
+    <Support />
   </div>
 </template>
