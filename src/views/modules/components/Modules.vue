@@ -1,6 +1,6 @@
 <script setup>
 import { useCoursesStore } from '@/stores/courses'
-import { computed, ref } from 'vue';
+import { computed, ref } from 'vue'
 const store = useCoursesStore()
 const modules = computed(() => store.courseSelected.modules)
 const lessonInPlayer = computed(() => store.lessonPlayer)

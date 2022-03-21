@@ -1,6 +1,6 @@
 <script setup>
 import { useCoursesStore } from '@/stores/courses'
-import { computed } from 'vue';
+import { computed } from 'vue'
 const store = useCoursesStore()
 const lesson = computed(() => store.lessonPlayer)
 const imgUrl = new URL('/src/assets/images/icons/laravel.svg', import.meta.url)

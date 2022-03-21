@@ -1,97 +1,88 @@
+<script setup>
+import { useSupportsStore } from '@/stores/supports'
+import { computed, reactive, ref } from 'vue'
+import SupportModal from '@/components/SupportModal.vue'
+const store = useSupportsStore()
+const supports = computed(() => store.supports)
+const showSupports = ref('0')
+const modal = reactive({
+  showModal: false,
+  supportReply: ''
+})
+const openModal = (supportId) => {
+  modal.showModal = true
+  modal.supportReply = supportId
+}
+</script>
+
 <template>
   <div class="content">
-    <div class="card">
+    <div v-for="support in supports.data" :key="support.id" class="card">
       <div class="commentContent main">
         <span class="avatar">
-          <img src="/src/assets/images/avatars/user01.svg" alt="" />
-        </span>
-        <span class="comment">
-          <div class="balloon">
-            <span class="fas fa-sort-down"></span>
-            <span class="owner">Fernando - 07/10/2021</span>
-            <span class="text">
-              Donec ligula libero, sollicitudin vel libero vel, mollis porttitor
-              turpis. Cras mattis turpis massa, sit amet fringilla diam auctor
-              ac. Integer sit amet rutrum risus. In eleifend urna sapien,
-              faucibus pharetra justo luctus quis. Vivamus eleifend fringilla
-              massa
-            </span>
-          </div>
-        </span>
-        <button class="btn primary">Ver respostas</button>
-      </div>
-    </div>
-    <div class="card">
-      <div class="commentContent main">
-        <span class="avatar">
-          <img src="/src/assets/images/avatars/user01.svg" alt="" />
+          <img
+            src="/src/assets/images/avatars/user01.svg"
+            alt="{{ support.user.name }}"
+          />
         </span>
         <div class="comment">
           <div class="balloon">
             <span class="fas fa-sort-down"></span>
-            <span class="owner">Fernando - 07/10/2021</span>
+            <span class="owner"
+              >{{ support.user.name }} - {{ support.dt_updated }}</span
+            >
             <span class="text">
-              In eleifend urna sapien, faucibus pharetra justo luctus quis.
-              Vivamus eleifend fringilla massa
+              {{ support.description }}
             </span>
           </div>
         </div>
-        <button class="btn primary">Ocultar respostas</button>
+        <button class="btn primary">
+          <span @click="showSupports = '0'" v-if="showSupports !== '0'"
+            >Ocultar respostas</span
+          >
+          <span @click="showSupports = support.id" v-else
+            >Exibir respostas (total: {{ support.replies?.length ? support.replies.length : 0 }})</span
+          >
+        </button>
       </div>
-      <div class="answersContent">
-        <div class="commentContent rightContent">
+      <div v-if="showSupports === support.id" class="answersContent">
+        <div
+          v-for="reply in support.replies"
+          :key="reply.id"
+          :class="[
+            'commentContent',
+            { rightContent: support.user.id !== reply.user?.id }
+          ]"
+        >
+          <span v-if="support.user.id === reply.user?.id" class="avatar">
+            <img src="/src/assets/images/avatars/user03.svg" alt="" />
+          </span>
           <div class="comment">
             <div class="balloon">
               <span class="fas fa-sort-down"></span>
-              <span class="owner">Carlos Ferreira - 07/10/2021</span>
+              <span class="owner"
+                >{{ reply.user?.name }} - {{ reply.date }}</span
+              >
               <span class="text">
-                In eleifend urna sapien, faucibus pharetra justo luctus quis.
-                Vivamus eleifend fringilla massa
+                {{ reply.description }}
               </span>
             </div>
           </div>
-          <span class="avatar">
+          <span v-if="support.user.id !== reply.user?.id" class="avatar">
             <img src="/src/assets/images/avatars/user03.svg" alt="" />
           </span>
         </div>
-        <div class="commentContent">
-          <span class="avatar">
-            <img src="/src/assets/images/avatars/user01.svg" alt="" />
-          </span>
-          <div class="comment">
-            <div class="balloon">
-              <span class="fas fa-sort-down"></span>
-              <span class="owner">Fernando - 07/10/2021</span>
-              <span class="text">
-                In eleifend urna sapien, faucibus pharetra justo luctus quis.
-                Vivamus eleifend fringilla massa
-              </span>
-            </div>
-          </div>
-        </div>
         <span class="answer">
-          <button class="btn primary">Responder</button>
+          <button @click="openModal(support.id)" class="btn primary">
+            Responder
+          </button>
         </span>
       </div>
     </div>
-    <div class="card">
-      <div class="commentContent main">
-        <span class="avatar">
-          <img src="/src/assets/images/avatars/user02.svg" alt="" />
-        </span>
-        <span class="comment">
-          <div class="balloon">
-            <span class="fas fa-sort-down"></span>
-            <span class="owner">João - 06/10/2021</span>
-            <span class="text">
-              Integer scelerisque placerat molestie. Vivamus dignissim bibendum
-              sapien, non suscipit arcu lobortis nec. Donec eros est, mollis
-              quis nibh quis, pellentesque suscipit libero.
-            </span>
-          </div>
-        </span>
-        <button class="btn primary">Ver respostas</button>
-      </div>
-    </div>
+    <SupportModal
+      @close-modal="modal.showModal = false"
+      :show-modal="modal.showModal"
+      :support-reply="modal.supportReply"
+    />
   </div>
 </template>

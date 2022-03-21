@@ -1,5 +1,16 @@
 <script setup>
-import Supports from '@/components/Supports.vue'
+import Support from '@/components/Support.vue'
+import { onMounted, ref } from 'vue'
+import { useSupportsStore } from '@/stores/supports'
+const store = useSupportsStore()
+const status = ref('')
+const getMySupports = (newStatus) => {
+  status.value = newStatus
+  store.getMySupports(status.value)
+}
+onMounted(() => {
+  getMySupports()
+})
 </script>
 <template>
   <div>
@@ -20,10 +31,30 @@ import Supports from '@/components/Supports.vue'
             </div>
             <div class="modules">
               <ul class="classes">
-                <li>Todos</li>
-                <li>Agurdando Minha Resposta</li>
-                <li>Aguardando Professor</li>
-                <li>Finalizados</li>
+                <li
+                  @click="getMySupports('')"
+                  :class="[status === '' ? 'active' : '']"
+                >
+                  Todos
+                </li>
+                <li
+                  @click="getMySupports('A')"
+                  :class="[status === 'A' ? 'active' : '']"
+                >
+                  Agurdando Minha Resposta
+                </li>
+                <li
+                  @click="getMySupports('P')"
+                  :class="[status === 'P' ? 'active' : '']"
+                >
+                  Aguardando Professor
+                </li>
+                <li
+                  @click="getMySupports('C')"
+                  :class="[status === 'C' ? 'active' : '']"
+                >
+                  Finalizados
+                </li>
               </ul>
             </div>
           </div>
@@ -31,7 +62,7 @@ import Supports from '@/components/Supports.vue'
         <div class="right">
           <div class="content">
             <div class="comments">
-              <Supports />
+              <Support />
             </div>
           </div>
         </div>
