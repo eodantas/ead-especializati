@@ -3,6 +3,8 @@ import { useRouter } from 'vue-router'
 import { useUsersStore } from '@/stores/users'
 import { ref } from 'vue'
 import { notify } from '@kyvg/vue3-notification'
+import { useToggleTypePassword } from '@/views/auth/composable/toggleTypePassword'
+const { typePassword, toggleTypePassword } = useToggleTypePassword()
 const props = defineProps({
   token: { type: String, required: true }
 })
@@ -101,12 +103,15 @@ const auth = async () => {
                 <i class="far fa-key"></i>
                 <input
                   v-model="password"
-                  type="password"
+                  :type="typePassword"
                   name="password"
                   placeholder="Senha"
                   required
                 />
-                <i class="far fa-eye buttom"></i>
+                <i
+                  @click.prevent="toggleTypePassword"
+                  class="far fa-eye buttom"
+                ></i>
               </div>
               <button
                 @click.prevent="auth"

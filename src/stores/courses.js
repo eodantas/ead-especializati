@@ -42,6 +42,27 @@ export const useCoursesStore = defineStore({
         video: '',
         views: []
       }
+    },
+    async markLessonViewed() {
+      try {
+        const response = await http.post('/lessons/viewed', {
+          lesson: this.lessonPlayer.id
+        })
+        this.addNewViewLesson()
+        return response
+      } catch (error) {
+        return error.response
+      }
+    },
+    addNewViewLesson() {
+      const modules = this.courseSelected.modules
+      modules.forEach((module, i) => {
+        module.lessons.forEach((lesson, j) => {
+          if (lesson.id === this.lessonPlayer.id) {
+            this.courseSelected.modules[i].lessons[j].views.push(1)
+          }
+        })
+      })
     }
   }
 })

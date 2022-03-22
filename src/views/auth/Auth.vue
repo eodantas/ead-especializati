@@ -3,6 +3,8 @@ import { useRouter } from 'vue-router'
 import { useUsersStore } from '@/stores/users'
 import { notify } from '@kyvg/vue3-notification'
 import { ref } from 'vue'
+import { useToggleTypePassword } from '@/views/auth/composable/toggleTypePassword'
+const { typePassword, toggleTypePassword } = useToggleTypePassword()
 const users = useUsersStore()
 const email = ref('')
 const password = ref('')
@@ -11,7 +13,7 @@ const router = useRouter()
 const imgUrl = new URL('/src/assets/images/logo.svg', import.meta.url).href
 const imgLogoDark = new URL('/src/assets/images/logoDark.svg', import.meta.url)
   .href
-
+// const { typePassword, toggleTypePassword } = useToggleTypePassword()
 const auth = async () => {
   loading.value = true
   const response = await users.auth({
@@ -101,12 +103,15 @@ const auth = async () => {
                 <i class="far fa-key"></i>
                 <input
                   v-model="password"
-                  type="password"
+                  :type="typePassword"
                   name="password"
                   placeholder="Senha"
                   required
                 />
-                <i class="far fa-eye buttom"></i>
+                <i
+                  @click.prevent="toggleTypePassword"
+                  class="far fa-eye buttom"
+                ></i>
               </div>
               <button
                 @click.prevent="auth"

@@ -9,12 +9,18 @@ export const useUsersStore = defineStore({
       name: '',
       email: ''
     },
-    logedIn: false
+    logedIn: false,
+    loading: false,
+    msgLoading: ''
   }),
   getters: {
     isLoged: (state) => state.logedIn
   },
   actions: {
+    setLoading(status, msg = 'Carregando... Aguarde!') {
+      this.loading = status
+      this.msgLoading = msg
+    },
     setUser(user) {
       this.user = user
       this.logedIn = true
@@ -28,8 +34,26 @@ export const useUsersStore = defineStore({
       try {
         const response = await http.post('/auth', params)
         sessionStorage.setItem(TOKEN_NAME, response.data.token)
+        await this.getMe()
         return response
       } catch (error) {
+        return error.response
+      }
+    },
+    async getMe() {
+      const token = sessionStorage.getItem(TOKEN_NAME)
+      if (!token) {
+        return { status: 1, msg: 'Token Not Found' }
+      }
+      const httpA = new Http({ auth: true })
+      try {
+        this.setLoading(true)
+        const response = await httpA.get('/me')
+        this.setLoading(false)
+        this.setUser(response.data.data)
+        return response
+      } catch (error) {
+        sessionStorage.removeItem(TOKEN_NAME)
         return error.response
       }
     },
