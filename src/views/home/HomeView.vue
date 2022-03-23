@@ -26,6 +26,7 @@ const myCourses = computed(() => store.myCourses)
         :key="course.id"
         :bg-name="'laravel'"
         :course="course"
+        class="animate__animated animate__headShake"
       />
     </ul>
   </div>

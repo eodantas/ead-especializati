@@ -3,9 +3,14 @@ import Modules from '@/views/modules/components/Modules.vue'
 import Player from '@/views/modules/components/Player.vue'
 import Supports from '@/views/modules/components/Supports.vue'
 import { useCoursesStore } from '@/stores/courses'
+import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 const store = useCoursesStore()
+const router = useRouter()
 const course = computed(() => store.courseSelected)
+if (course.value.id === '') {
+  router.push({ name: 'campus.home' })
+}
 </script>
 
 <template>

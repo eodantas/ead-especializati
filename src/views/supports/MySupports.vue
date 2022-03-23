@@ -1,12 +1,18 @@
 <script setup>
 import Support from '@/components/Support.vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useSupportsStore } from '@/stores/supports'
+import Pagination from '@/components/Pagination.vue'
+
 const store = useSupportsStore()
 const status = ref('')
+const mySupports = computed(() => store.supports)
 const getMySupports = (newStatus) => {
   status.value = newStatus
-  store.getMySupports(status.value)
+  store.getMySupports({ status: status.value })
+}
+const changePage = (page) => {
+  store.getMySupports({ status: status.value, page })
 }
 onMounted(() => {
   getMySupports()
@@ -65,6 +71,7 @@ onMounted(() => {
               <Support />
             </div>
           </div>
+          <Pagination :pagination="mySupports" @change-page="changePage" />
         </div>
       </div>
     </div>

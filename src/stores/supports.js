@@ -72,10 +72,9 @@ export const useSupportsStore = defineStore({
         return error.response
       }
     },
-    async getMySupports(status = '') {
+    async getMySupports(params) {
       try {
-        const response = await http.get('/my-supports', { params: { status } })
-        console.log(response.data)
+        const response = await http.get('/my-supports', { params })
         this.setSupports(response.data)
         return response
       } catch (error) {

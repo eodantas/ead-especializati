@@ -25,7 +25,7 @@ export const useUsersStore = defineStore({
       this.user = user
       this.logedIn = true
     },
-    logOut() {
+    unsetUser() {
       this.user.name = ''
       this.user.email = ''
       this.logedIn = false
@@ -35,6 +35,17 @@ export const useUsersStore = defineStore({
         const response = await http.post('/auth', params)
         sessionStorage.setItem(TOKEN_NAME, response.data.token)
         await this.getMe()
+        return response
+      } catch (error) {
+        return error.response
+      }
+    },
+    async logout() {
+      const httpA = new Http({ auth: true })
+      try {
+        const response = await httpA.post('/logout')
+        sessionStorage.removeItem(TOKEN_NAME)
+        this.unsetUser()
         return response
       } catch (error) {
         return error.response
